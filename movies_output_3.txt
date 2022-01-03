@@ -1,0 +1,31 @@
+No configs found; falling back on auto-configuration
+No configs specified for inline runner
+Creating temp directory C:\Users\Catrina\AppData\Local\Temp\task1.Catrina.20220103.233342.800604
+Running step 1 of 2...
+Running step 2 of 2...
+job output is in C:\Users\Catrina\AppData\Local\Temp\task1.Catrina.20220103.233342.800604\output
+Streaming final output from C:\Users\Catrina\AppData\Local\Temp\task1.Catrina.20220103.233342.800604\output...
+Removing temp directory C:\Users\Catrina\AppData\Local\Temp\task1.Catrina.20220103.233342.800604...
+""	[[",,diebuster,death,divers", 1], ["work", 1], ["wreck,viktor,my", 1], ["friend,refutation", 1], ["judgements", 1], ["pro", 1], ["con", 1], ["rendered", 1], ["film,gabriel,call", 1], ["sign,", 1]]
+"(no genres listed)"	[["my", 33], ["di", 25], ["you", 25], ["is", 25], ["la", 23], ["e", 22], ["live", 21], ["man", 20], ["me", 17], ["series,persian", 17]]
+"action"	[["vs.", 48], ["fu", 25], ["man", 22], ["is", 22], ["final", 20], ["iii", 18], ["lost", 17], ["movie", 17], ["wars", 16], ["new", 16]]
+"adventure"	[["lost", 29], ["who", 16], ["golden", 16], ["vs.", 16], ["legend", 15], ["time", 15], ["movie", 15], ["adventures", 14], ["secret", 14], ["king", 13]]
+"animation"	[["movie", 31], ["i", 25], ["little", 20], ["conan", 20], ["is", 19], ["christmas", 18], ["time", 17], ["chapter", 17], ["legend", 15], ["vs.", 15]]
+"children"	[["christmas", 28], ["little", 18], ["time", 17], ["adventures", 15], ["i", 15], ["big", 13], ["great", 13], ["story", 12], ["lost", 12], ["secret", 11]]
+"comedy"	[["is", 133], ["i", 123], ["my", 113], ["'s", 113], ["you", 103], ["your", 81], ["me", 76], ["it", 73], ["do", 72], ["new", 64]]
+"crime"	[["is", 32], ["new", 18], ["i", 18], ["chan", 18], ["holmes", 17], ["my", 16], ["who", 14], ["do", 12], ["you", 12], ["dr.", 12]]
+"documentary"	[["story", 73], ["life", 64], ["is", 64], ["man", 37], ["am", 37], ["my", 33], ["i", 33], ["you", 31], ["who", 31], ["american", 28]]
+"drama"	[["is", 169], ["my", 166], ["you", 93], ["i", 86], ["love", 78], ["who", 70], ["me", 67], ["'s", 61], ["do", 58], ["man", 50]]
+"fantasy"	[["king", 14], ["lost", 13], ["witch", 13], ["book", 13], ["white", 11], ["i", 11], ["who", 10], ["golden", 10], ["adventures", 9], ["potter", 9]]
+"film-noir"	[["my", 4], ["crooked", 3], ["is", 3], ["her", 2], ["city", 2], ["was", 2], ["devil", 1], ["blue", 1], ["dress,suture,bitter", 1], ["moon,force", 1]]
+"genres"	[["titl", 1]]
+"horror"	[["vs.", 30], ["night", 25], ["living", 21], ["iii", 21], ["blood", 20], ["house", 19], ["i", 18], ["dead", 17], ["you", 17], ["dr.", 15]]
+"imax"	[["potter", 6], ["wars", 2], ["episode", 2], ["am", 2], ["fu", 2], ["battle", 2], ["saga", 2], ["evil", 2], ["deathly", 2], ["hallows", 2]]
+"musical"	[["is", 14], ["me", 9], ["your", 7], ["my", 6], ["'s", 5], ["world", 5], ["girls", 5], ["goes", 5], ["love", 4], ["do", 4]]
+"mystery"	[["chan", 27], ["holmes", 17], ["conan", 16], ["murder", 14], ["is", 14], ["mystery", 13], ["who", 12], ["my", 12], ["you", 10], ["mr.", 10]]
+"romance"	[["love", 64], ["is", 62], ["my", 55], ["you", 42], ["'s", 38], ["me", 34], ["i", 29], ["it", 27], ["your", 27], ["do", 22]]
+"sci-fi"	[["vs.", 31], ["wars", 18], ["outer", 16], ["man", 15], ["time", 15], ["planet", 14], ["trek", 13], ["who", 12], ["lost", 10], ["shell", 10]]
+"thriller"	[["is", 23], ["i", 22], ["you", 21], ["my", 20], ["who", 20], ["man", 18], ["last", 18], ["chan", 18], ["your", 14], ["me", 14]]
+"war"	[["is", 11], ["are", 10], ["love", 6], ["private", 5], ["war", 5], ["last", 5], ["world", 5], ["la", 5], ["my", 5], ["was", 5]]
+"western"	[["man", 11], ["called", 10], ["is", 9], ["wild", 8], ["your", 8], ["west", 6], ["my", 6], ["who", 5], ["kill", 5], ["will", 5]]
+execution time:  68.38827395439148
