@@ -1,3 +1,5 @@
+import time
+
 import nltk
 from mrjob.job import MRJob
 from mrjob.step import MRStep
@@ -74,4 +76,7 @@ class MovieGenreKeywords(MRJob):
 
 
 if __name__ == '__main__':
+    start = time.time()
     MovieGenreKeywords.run()
+    end = time.time()
+    print('execution time: ', end - start)

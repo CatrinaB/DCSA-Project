@@ -1,3 +1,5 @@
+import re
+
 import nltk
 
 str = "B*A*P*S (1997),Comedy"
@@ -30,3 +32,9 @@ print("drama".split('|'))
 #     for line in inf:
 #         if(line.find('"') > -1):
 #             print(line.split('"'))
+
+WORD_RE = re.compile(r"[\w']+") # match words
+str = '#	11342'
+for word in WORD_RE.findall(str):
+    print(word)
+    print(word.isnumeric())
