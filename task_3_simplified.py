@@ -5,10 +5,9 @@ from mrjob.job import MRJob
 from mrjob.step import MRStep
 import pandas as pd
 
-# global variable used to store the feature values of the unlabeled data
-unlabeled_data = []
-
 class KNNMapReduce(MRJob):
+	# class variable used to store the feature values of the unlabeled data
+	unlabeled_data = []
 	
 	def mapper_1(self, _, line):
 		"""
@@ -33,8 +32,7 @@ class KNNMapReduce(MRJob):
 		"""
 		# if the data is unlabeled, we save it in the global variable
 		if species == '':
-			global unlabeled_data
-			unlabeled_data = list(features)
+			KNNMapReduce.unlabeled_data = list(features)
 		# if it is labeled, we return a (species, [if, features]) pair
 		# the features input argument is a generator and cannot be yielded as such, so we transform it into a list
 		else:
@@ -50,7 +48,7 @@ class KNNMapReduce(MRJob):
 		"""
 		# for each set of feature values in unlabeled_data, we calculate the distance between it and each
 		# labeled feature set; then, we return a (unlabeled_set_id, [distance, label]) pair
-		for el in unlabeled_data:
+		for el in KNNMapReduce.unlabeled_data:
 			for feature in features:
 				yield el[0], (self.euclidean_distance(el[1:], feature[1:]), species)
 	
@@ -59,7 +57,7 @@ class KNNMapReduce(MRJob):
 		Combiner that partially combines the (unlabeled_set_id, [distance, label]) pairs by key
 		:param unlabeled_set_id: list of unlabeled sets' IDs, used as key
 		:param distances: generator of [distance, label] elements
-		:return: (unlabeled_set_id, [distance, label])
+		:return: (unlabeled_set_id, [[distance, label]])
 		"""
 		# just like before, we need to convert the generator to a list
 		yield unlabeled_set_id, list(distances)
@@ -70,7 +68,7 @@ class KNNMapReduce(MRJob):
 		the closest 15 elements to each unlabeled_set_id key, together with their labels
 		:param unlabeled_set_id: list of unlabeled sets' IDs, used as key
 		:param distances: generator of [distance, label] elements
-		:return: (unlabeled_set_id, [distance, label]) pairs
+		:return: (unlabeled_set_id, [[distance, label]]) pairs
 		"""
 		# the generator 'distances' is of form [list 1 from combiner, list 2 from combiner, ...], where "list n from
 		# combiner" is of shape (number_elements, 2); in other words, it is 3D-shaped and we need to make it 2D

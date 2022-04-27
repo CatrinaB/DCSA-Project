@@ -1,0 +1,182 @@
+\documentclass[12pt, a4paper]{article}
+\pagestyle{plain}
+
+%\usepackage{graphicx, subcaption}
+%\usepackage{caption, array, multirow}
+%\captionsetup{font=footnotesize}
+%\usepackage{float}
+\usepackage{amsmath}
+
+\usepackage{enumitem}
+
+\author{Catrina Bodean}
+\title{DCSA project report}
+\date{January 2021}
+
+
+\begin{document}
+\maketitle
+
+\section{Prerequisites for running the code}
+Before running any task, run the following command:\\
+
+\centerline{\texttt{pip install -r requirements.txt}}
+
+\hfill 
+
+\noindent
+This will install all the additional packages used in the project.\\
+
+\noindent
+\textbf{Note:} the results of each task are not mentioned in the report, but they are included as output files for each task.
+
+\section{Task 1 - Top 10 keywords for each movie genre}
+\subsection{Short description of the code}
+The task is done in three steps.
+
+\begin{enumerate}[label=\textbf{Step \arabic*.}, wide=0pt, leftmargin=2em]
+\item Grouping the input data by movie genre.
+
+	\subitem \textbf{Mapper}: It reads the input file line by line and returns a (genre, partial\_title) pair for each line. The partial title is the original title without numerals, adverbs, conjunctions etc.
+	\subitem \textbf{Reducer}: It groups the pairs by genre and returns (genre, [titles]).
+\item Calculating the word count for each word pertaining to a genre.
+	\subitem \textbf{Mapper}: For each word in each title of each genre, it returns a (genre, [word, 1]) pair. This will allows me to count each word occurrence later on.
+	\subitem \textbf{Combiner}: It groups the [word, 1] lists by genre. Then, it goes through each [word, 1] element and creates a dictionary of form {word: total\_number\_of\_occurrences}. At the end it returns a (genre, dictionary) pair.
+	\subitem \textbf{Reducer}: For each genre, it sorts the dictionary in decreasing order by number of word occurences and returns the ten most used words as a (genre, [word, counts]) pair.
+\item Displaying the top 10 keywords
+	\subitem \textbf{Mapper}: It takes the (genre, [word, counts]) pair and returns (genre, words) for each word in the list, removing the count number.
+	\subitem \textbf{Reducer}: It groups by genre the pairs given by the mapper and returns a (genre, [top\_ten\_keywords) pair for each genre.
+\end{enumerate}
+
+\subsection{Running the code}
+If we want to see the output in the console, we simply run \\
+
+\centerline{\texttt{python task1.py movies.csv}}
+
+\noindent\\
+If we wish to have the output saved in an output file, like "task1\_output.txt", we use the command \\
+
+\centerline{\texttt{python task1.py movies.csv > task1\_output.txt}}
+
+\hfill 
+
+\noindent
+One such output file is included in the archive.
+
+
+\section{Task 2 - Reverse web-link graph}
+\subsection{Short description of the code}
+This task is done in one step. First, the mapper reads the input file, "web-Google.txt", and returns a (to\_id, from\_id) pair for each relevant line of the file. Then, the reducer groups all the pairs by the to\_id key.\\
+
+\noindent
+\textbf{Note}: both the combiner and the reducer produce the desired output, so I chose to only use a reducer.
+
+\subsection{Running the code}
+If we want to see the output in the console, we simply run \\
+
+\centerline{\texttt{python task2.py web-Google.txt}}
+
+\noindent\\
+However, because the output is extremely long, it would be better to save it to an output file; if the name of our output file is "task2\_output.txt", for example, we use the command \\
+
+\centerline{\texttt{python task2.py web-Google.txt > task2\_output.txt}}
+
+\hfill 
+
+\noindent
+One such output file is included in the archive.
+
+\section{Task 3 - k-nearest neighbour (k = 15)}
+\subsection{Short description of the code}
+
+First and foremost, we need to normalize the features in the input file. In order to do this, we read the file, "Iris.csv", using the \texttt{pandas} library and the formula 
+\begin{equation}
+x_{normalized} = \frac{x}{\vert x_{maximum} \vert}
+\end{equation}Then, we create a new file, "Iris\_normalized.csv", with the normalized values. I chose to create a new file so that the original values are not lost.\\
+
+The KNN task itself is done in three steps:
+\begin{enumerate}[label=\textbf{Step \arabic*.}, wide=0pt, leftmargin=2em]
+\item Grouping the input data by species.
+	\subitem \textbf{Mapper}: It reads the input file line by line and returns a (species, [id, features]) key-values pair for each line. This will allow us to group the features corresponding to each species, and also to identify the flowers that had not been categorised yet, who will have the species "".
+	\subitem \textbf{Reducer}: It groups the pairs by species and returns the labeled data, while saving the unlabeled data (species = "") in the class variable \texttt{unlabeled\_data}.
+\item Calculating the distance between the unlabeled and the labeled data.
+	\subitem \textbf{Mapper}: It takes the (labeled\_species, [id, features]) output of the previous reducer and calculates the distance between each set of features and every set of unlabeled features. It returns a (unlabeled\_set\_id, [[distance, label]]) for each unlabeled and each labeled set of features. The distance is calculated using the formula
+
+\begin{equation}
+	d(x, y) = \sqrt{(x_1 - y_1)^2 + (x_2 - y_2)^2 + (x_3 - y_3)^2}
+\end{equation}
+
+	\subitem \textbf{Combiner}: Partially groups the pairs outputted by the mapper by unlabeled\_set\_id.
+	\subitem \textbf{Reducer}: Finishes grouping the pairs by unlabeled\_set\_id, then it sorts the values of the (key, value) pairs by the distance and returns (unlabeled\_set\_id,  [[distance, label][0:15]]); the first 15 elements of the (distance, label) list correspond to the 15 nearest neighbours.
+\item Identify the most common label and return the prediction for each unlabeled feature set.
+	\subitem \textbf{Mapper}: It takes the (unlabeled\_set\_id, [[distance, label]]) pairs outputted by the reducer and, for each element of the values list, return a (unlabeled\_set\_id, label) pair.
+	\subitem \textbf{Reducer}: It groups by unlabeled\_set\_id the pairs given by the mapper and returns a (unlabeled\_set\_id, most\_common\_label) pair for each unlabeled feature set. It determines the most common label using the \texttt{Counter} function of the \texttt{collection} package; since all the label lists have only 15 elements, it makes no sense to use another MapReduce step just to count them.
+\end{enumerate}
+
+\subsection{Running the code}
+If we want to see the output in the console, we simply run \\
+
+\centerline{\texttt{python task3.py Iris\_normalized.csv}}
+
+\noindent\\
+If we wish to have the output saved in an output file, like "task3\_output.txt", we use the command \\
+
+\centerline{\texttt{python task3.py Iris\_normalized.csv > task3\_output.txt}}
+\hfill 
+
+\noindent
+One such output file is included in the archive.\\
+
+\noindent
+\textbf{Note:} Although there is no "Iris\_normalized file in the project folder, it will be generated by the Python file.
+
+
+\section{Task 4 -  The Frobenius Norm of a given matrix}
+
+\subsection{Short description of the code}
+
+This task is resolved in two ways: the first one uses the index of the matrix line each element is on as a key; the second method does not use any key. The rationale for the second method is that (a) the equation of the Frobenius norm is
+
+\begin{equation}
+	\Vert A \Vert_F = \sqrt{\sum_{i=1}^m\sum_{j=1}^n\vert a_{ij}\vert^2}
+\end{equation}
+
+\noindent
+and (b) addition is commutative; therefore, as long as all the elements of the matrix are summed before applying the square root, the order in which they are added doesn't matter.\\
+
+\noindent\textbf{Method 1}
+
+\begin{enumerate}[label=\textbf{Step \arabic*.}, wide=0pt, leftmargin=2em]
+	\item Calculating the sum of the elements of each matrix line.
+		\subitem \textbf{Mapper}: It reads the input file line by line and returns a (line\_id, $\vert$number$\vert^2$) pair for each number in the line. The line index is generated by increasing a class variable by 1 each time a new line is read.
+		\subitem \textbf{Reducer}: It groups the pairs by line\_id and returns a (\_, row\_sum) pair, where row\_sum = the sum of all the elements of one line. We don't return a key because we need to add all the row sums, so we don't need to group them by anything.
+	\item Calculating the Frobenius norm.
+		\subitem \textbf{Reducer}: It calculates the sum of all the row sums outputted by the previous reducer and outputs the square root of the final sum.
+\end{enumerate}
+
+\noindent\textbf{Method 2}
+
+\begin{enumerate}[label=\textbf{Step \arabic*.}, wide=0pt, leftmargin=2em]
+	\item Calculating the sum of the elements of each matrix line.
+		\subitem \textbf{Mapper}: It reads the input file line by line and returns a (\_, $\vert$number$\vert^2$) pair for each number in the line.
+		\subitem \textbf{Reducer}: It groups the pairs randomly and returns a (\_, sum) pair, where sum = the sum of all the elements grouped by the same "key". We don't return a key because we need to add all the sums, so we don't need to group them by anything.
+	\item Calculating the Frobenius norm.
+		\subitem \textbf{Reducer}: It calculates the sum of all the sub-sums outputted by the previous reducer and outputs the square root of the final sum.
+\end{enumerate}
+
+In practice, both methods output approximately the same value, with small differences caused by the different propagation of the floating point error (e.g. 128.4506152933251 and 128.45061529332497).
+
+\subsection {Running the code}
+The code can be run using the command \\
+
+\centerline{\texttt{python task4.py A.txt}}
+
+If we wish to have the output saved in an output file, like "task4\_output.txt", we use the command \\
+
+\centerline{\texttt{python task4.py A.txt > task4\_output.txt}}
+\hfill 
+
+\noindent
+One such output file is included in the archive.
+
+\end{document}
